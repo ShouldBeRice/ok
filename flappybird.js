@@ -1,3 +1,14 @@
+// HTML structure (for reference):
+// <canvas id="board"></canvas>
+// <div id="quiz" style="display: none;">
+//   <h3 id="question"></h3>
+//   <button class="answer" data-answer="A"></button>
+//   <button class="answer" data-answer="B"></button>
+//   <button class="answer" data-answer="C"></button>
+//   <button class="answer" data-answer="D"></button>
+//   <button id="backButton">Back</button>
+// </div>
+
 let board;
 let boardWidth = 360;
 let boardHeight = 640;
@@ -69,13 +80,32 @@ window.onload = function () {
 
   requestAnimationFrame(update);
   setInterval(placePipes, 1500);
+
+  // Thêm sự kiện cho bàn phím
   document.addEventListener("keydown", moveBird);
+
+  // Thêm sự kiện cảm ứng cho thiết bị di động
+  document.addEventListener("touchstart", touchMoveBird);
 
   // Add event listeners for quiz answers
   document.querySelectorAll(".answer").forEach((button) => {
     button.addEventListener("click", checkAnswer);
   });
+
+  document.getElementById("backButton").addEventListener("click", function () {
+    window.location.href = "GAME.html"; // Chuyển về trang chủ
+  });
 };
+
+// Hàm xử lý cảm ứng
+function touchMoveBird() {
+  velocityY = -6;
+  if (gameOver) {
+    bird.y = birdY;
+    pipeArray = [];
+    velocityY = 0;
+  }
+}
 
 function update() {
   if (gameOver) return;
@@ -205,8 +235,3 @@ function resetGame(resetScore) {
   if (resetScore) score = 0;
   requestAnimationFrame(update);
 }
-document.getElementById("backButton").addEventListener("click", function () {
-  // Logic xử lý khi nhấn nút Back
-  // Ví dụ: Chuyển về trang chủ
-  window.location.href = "GAME.html"; // Thay "index.html" bằng trang bạn muốn chuyển đến.
-});
